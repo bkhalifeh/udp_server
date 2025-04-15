@@ -10,12 +10,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let (result, mut buf) = socket.recv_from(buf).await;
             if let Ok((read, client_addr)) = result {
                 buf.resize(read, 0);
-                let decoded = udp_server::gzip_decode(&buf);
-                println!(
-                    "recv \"{}\" from {}",
-                    String::from_utf8_lossy(&decoded),
-                    client_addr
-                );
+                let decoded = udp_server::message_decode(&buf);
+                println!("recv \"{:?}\" from {}", decoded, client_addr);
             }
         }
     })

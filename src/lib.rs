@@ -1,6 +1,7 @@
 use flate2::Compression;
 use flate2::read::GzDecoder;
 use flate2::write::GzEncoder;
+use serde::{Deserialize, Serialize};
 use std::env;
 use std::io::{Read, Write};
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
@@ -26,4 +27,20 @@ pub fn gzip_decode(buf: &[u8]) -> Vec<u8> {
     let mut out = Vec::new();
     d.read_to_end(&mut out).unwrap();
     out
+}
+
+pub fn message_encode(m: Message) -> Vec<u8> {
+    let json = serde_json::to_vec(&m).unwrap();
+    gzip_encode(&json)
+}
+
+pub fn message_decode(encoded_message: &[u8]) -> Message {
+    let json = gzip_decode(&encoded_message);
+    serde_json::from_slice(&json).unwrap()
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Message {
+    pub user_id: i32,
+    pub message: String,
 }

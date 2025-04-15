@@ -12,7 +12,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let message = Vec::from("behzad");
 
         let (result, _buf) = client_socket
-            .send_to(udp_server::gzip_encode(&message), server_addr.clone())
+            .send_to(
+                udp_server::message_encode(udp_server::Message {
+                    user_id: 1,
+                    message: String::from("Hello World!"),
+                }),
+                server_addr.clone(),
+            )
             .await;
         result.unwrap();
         Ok(())
