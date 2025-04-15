@@ -7,10 +7,6 @@ edition = "2024"
 dotenvy = "0.15.7"
 tokio-uring = "0.5.0"
 
-[lib]
-name = "lib"
-path = "src/lib.rs"
-
 [[bin]]
 name = "client"
 path = "src/bin/client.rs"
